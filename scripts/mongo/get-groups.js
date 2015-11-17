@@ -1,0 +1,1 @@
+db.getCollection('groups').find({}).forEach(function(group) {print(group.groupId + '||' + group.name + '||' + group.isInvitationOnly + '||' + group.memberCount + '||' + group.photoCount +     '||' + group.trackedMemberCount);})
