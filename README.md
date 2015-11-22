@@ -1,7 +1,13 @@
 # CSCE 444 Information Visualization Project
 Visualizing Flickr communities and their users for CSCE 444 at TAMU
 
-## Data Pre-Formatting
+
+
+## Data Pre-Processing
+Mongo is used to perform some minor transformation on the raw data set. This is then exported to CSV format and imported into SQL. MySQL then processes the data.
+
+### Methods
+
 The data we have been provided is in JSON format. It consists of some 30147 users, and these users are a part of 194085 unique groups. The data provided is in a user-centric format.
 
 Because the data is user-focused, pre-processing is required to get the groups out of each user object. Since the data is already in JSON, Mongo is for this phase of preprocessing. We first get the raw data into Mongo:
@@ -25,4 +31,8 @@ mongo --quiet localhost/flickr-test scripts/mongo/get-groups-users.js > exports/
 mongo --quiet localhost/flickr-test scripts/mongo/get-users-following.js > exports/users-following.csv
 ```
 
-We must now create the schema in MySQL. In MySQL workbench the `create-schema.sql` and `create-functions-procedures.sql`. 
+We must now create the schema in MySQL. In MySQL workbench the [create-schema.sql](scripts/sql/create-schema.sql) and [create-functions-procedures.sql](sql/scripts/create-functions-procedures.sql) scripts should be run. 
+
+Finally, run the `update_group_relation_for_range` procedure. Use the parameters to reduce the data set to process. On my computer, processing with both parameters at `500` created several million rows and took about two days to run. 
+
+This completes the preprocessing for our data.
