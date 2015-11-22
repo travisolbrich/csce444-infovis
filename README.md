@@ -31,7 +31,7 @@ mongo --quiet localhost/flickr-test scripts/mongo/get-groups-users.js > exports/
 mongo --quiet localhost/flickr-test scripts/mongo/get-users-following.js > exports/users-following.csv
 ```
 
-We must now create the schema in MySQL. In MySQL workbench the [create-schema.sql](scripts/sql/create-schema.sql) and [create-functions-procedures.sql](sql/scripts/create-functions-procedures.sql) scripts should be run. 
+We must now create the schema in MySQL. In MySQL workbench the [create-schema.sql](scripts/sql/create-schema.sql) and [create-functions-procedures.sql](scripts/sql/create-functions-procedures.sql) scripts should be run. 
 
 Finally, run the `update_group_relation_for_range` procedure. Use the parameters to reduce the data set to process. On my computer, processing with both parameters at `500` created several million rows and took about two days to run. 
 
