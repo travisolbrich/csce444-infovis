@@ -23,12 +23,12 @@
             var w = 1000,
                 h = 869;
             var force = d3.layout.force()
-                            .charge(-250)
+                            .charge(-275)
                             //.chargeDistance(100)
                             .linkDistance(30)
                             //.friction(0)
                             //.theta(1)
-                            .gravity(.15)
+                            .gravity(.1)
                             .size([w, h]);
             var svg = d3.select("div")
                             .append("svg")
@@ -54,7 +54,7 @@
                             .attr("class", "node")
                             .attr("cx", function() { return Math.random() * 450; })
                             .attr("cy", function() { return Math.random() * 450; })
-                            .attr("r", function(d) { return Math.sqrt(d.occurrences)/1.2})
+                            .attr("r", function(d) { return Math.sqrt(d.occurrences)/1.8+30})
                             .style("fill", "steelblue")          //function(d) { return color(1); }
                             .style("stroke", "darkgrey")
                             .style("stroke-width", "2px")
