@@ -1,0 +1,28 @@
+html, body{
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    margin:0px;
+}
+
+.left {
+    background-color: aqua;
+    height: 100%;
+    width: 73%;
+    border-style: none;
+    margin: 0px;
+}
+
+.right {
+    background-color: white;
+    position: fixed;
+    top: 0px;
+    left: 73%;
+    height: 100%;
+    width: 27%;
+    border-style: none;
+    margin: 0px;
+    padding: 5px;
+}
