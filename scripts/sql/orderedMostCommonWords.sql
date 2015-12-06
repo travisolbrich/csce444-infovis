@@ -1,0 +1,1 @@
+SELECT lower(word), count(*) as total FROM flickr.most_common_words group by lower(word) order by total desc;
