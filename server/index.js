@@ -33,6 +33,21 @@ app.get('/relations/word/:word', function(req, res) {
     connection.end();
 });
 
+app.get('/groups/word/:word', function(req, res) {
+
+    var connection = mysql.createConnection(sqlconn.conn());
+    connection.connect();
+
+    connection.query("select distinct(groupAId) as groupId from (select distinct groupAId from group_relations_word where word = '" + req.params.word + "') a union (select distinct groupBId from group_relations_word where word = '" + req.params.word + "')", function (err, rows, fields) {
+        if (err) throw err;
+
+        res.send(JSON.stringify(rows));
+    });
+
+    connection.end();
+});
+
+
 app.get('/group/:groupId', function(req, res) {
 
     var connection = mysql.createConnection(sqlconn.conn());
