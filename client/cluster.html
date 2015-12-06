@@ -15,15 +15,15 @@
     <div class="clearfix"></div>
 
     <div class="right">
-        <h3><pre>   100 Most Popular 
- Words in Group Names</pre></h3>
+        <h1><pre>     100 Most Popular 
+   Words in Group Names</pre></h1>
     </div>
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script>
-            var w = 520,
-                h = 429;
+            var w = 1000,
+                h = 869;
             var force = d3.layout.force()
-                            .charge(-60)
+                            .charge(-250)
                             //.chargeDistance(100)
                             .linkDistance(30)
                             //.friction(0)
@@ -42,25 +42,46 @@
                 force.nodes(graph.nodes)
                      .start();
                 
+                /*var gnodes = svg.selectAll('g.gnode')
+                                .data(graph.nodes)
+                                .enter()
+                                .append('g')
+                                .classed('gnode', true);*/
+                
                 var node = svg.selectAll(".node")
                             .data(graph.nodes)
                             .enter().append("circle")
                             .attr("class", "node")
                             .attr("cx", function() { return Math.random() * 450; })
                             .attr("cy", function() { return Math.random() * 450; })
-                            .attr("r", 12.5)
+                            .attr("r", function(d) { return Math.sqrt(d.occurrences)/1.2})
                             .style("fill", "steelblue")          //function(d) { return color(1); }
                             .style("stroke", "darkgrey")
                             .style("stroke-width", "2px")
+                            .style("fontcolor", "white")
                             .call(force.drag);
                 
                 node.append("title")
                     .text(function(d) { return d.word; });
                 
+                /*var titles = gnodes.append("title")
+                            .text(function(d) { return d.word; });*/
+                
+                //console.log(titles);
+                
                 force.on("tick", function() {
                     node.attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; });
                 });
+                
+                /*node.on("click", function(){
+                   window.location='#'; 
+                });*/
+                
+                //gnodes.attr("transform", function(d) {return 'translate('+ [d.x, d.y] + ')'});
+                /*gnodes.attr("transform", function(d) { 
+                    return 'translate(' + [d.x, d.y] + ')'; 
+                });*/
             });
         </script>
     <!--<script src="cluster.js"></script>    -->
