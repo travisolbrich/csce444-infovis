@@ -10,10 +10,10 @@ app.get('/words/frequency', function(req, res) {
     var connection = mysql.createConnection(sqlconn.conn());
     connection.connect();
 
-    connection.query('SELECT count(*) as count, word FROM flickr.group_relations_word group by word;', function (err, rows, fields) {
+    connection.query('SELECT count(*) as occurrences, word FROM flickr.group_relations_word group by word;', function (err, rows, fields) {
         if (err) throw err;
 
-        res.send(JSON.stringify(rows));
+        res.send({nodes: rows});
     });
 
     connection.end();
