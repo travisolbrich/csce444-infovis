@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.3",
-    "mysql": "github:felixge/node-mysql"
+    "mysql": "github:felixge/node-mysql",
+    "cors": "latest"
   }
 }

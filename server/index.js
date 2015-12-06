@@ -1,7 +1,9 @@
 var mysql = require('mysql');
 var express = require('express');
 var app = express();
+var cors = require('cors');
 var sqlconn = require('./sqlconn.js');
+app.use(cors({origin: true}));
 
 app.get('/words/frequency', function(req, res) {
 
@@ -59,4 +61,4 @@ app.get('/group/:groupId/users', function(req, res) {
     connection.end();
 });
 
-app.listen(80);
+app.listen(8080);
