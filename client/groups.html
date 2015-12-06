@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="cluster.css">
+</head>
+
+<body>
+<div class="left">
+
+</div>
+<div class="clearfix"></div>
+
+<div class="right">
+    <h1><pre>     100 Most Popular
+   Words in Group Names</pre>
+    </h1>
+</div>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+    var w = 1000,
+            h = 869;
+    var force = d3.layout.force()
+            .charge(-100)
+        //.chargeDistance(100)
+            .linkDistance(100)
+        //.friction(0)
+        //.theta(1)
+            .gravity(1)
+            .size([w, h]);
+    var svg = d3.select("div")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+            .style("background", "aqua");
+
+    d3.json("http://travisolbrich.com:8080/groups/word/me", function (error, nodes) {
+        if (error) throw error;
+
+        d3.json("http://travisolbrich.com:8080/relations/word/me", function (error, edgesPreprocess) {
+            if (error) throw error;
+
+            // http://stackoverflow.com/questions/23986466/d3-force-layout-linking-nodes-by-name-instead-of-index
+            var edges = [];
+            edgesPreprocess.forEach(function (e) {
+                var sourceNode = nodes.filter(function (n) {
+                    return n.groupId === e.groupAId;
+                })[0]
+                var targetNode = nodes.filter(function (n) {
+                    return n.groupId === e.groupBId;
+                })[0];
+
+                edges.push({
+                    source: sourceNode,
+                    target: targetNode,
+                    value: e.memberCount
+                });
+            });
+
+            force.nodes(nodes).links(edges).start();
+
+            var node = svg.selectAll(".node")
+                    .data(nodes)
+                    .enter().append("circle")
+                    .attr("class", "node")
+                    .attr("cx", function () {
+                        return Math.random() * 450;
+                    })
+                    .attr("cy", function () {
+                        return Math.random() * 450;
+                    })
+                    .attr("r", function (d) {
+                        return Math.sqrt(d.trackedUserCount) / 1.1 + 2
+                    })
+                    .style("fill", "steelblue")          //function(d) { return color(1); }
+                    .style("stroke", "darkgrey")
+                    .style("stroke-width", "2px")
+                    .style("fontcolor", "white")
+                    .call(force.drag);
+
+            var link = svg.selectAll(".link")
+                    .data(edges)
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .style("stroke", "#333")
+                    .style("stroke-width", "1px");
+
+
+            node.append("title").text(function (d) {
+                return d.name;
+            });
+
+            force.on("tick", function () {
+                node.attr("cx", function (d) {
+                    return d.x;
+                })
+                        .attr("cy", function (d) {
+                            return d.y;
+                        });
+                link.attr("x1", function (d) {
+                    return d.source.x;
+                })
+                        .attr("y1", function (d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function (d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function (d) {
+                            return d.target.y;
+                        });
+            });
+
+        })
+    });
+</script>
+<!--<script src="cluster.js"></script>    -->
+</body>
+</html>
