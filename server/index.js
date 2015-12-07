@@ -10,7 +10,7 @@ app.get('/words/frequency', function(req, res) {
     var connection = mysql.createConnection(sqlconn.conn());
     connection.connect();
 
-    connection.query('SELECT count(*) as occurrences, word FROM flickr.group_relations_word group by word;', function (err, rows, fields) {
+    connection.query('SELECT count(*) as occurrences, word FROM flickr.group_relations_word group by word order by occurrences', function (err, rows, fields) {
         if (err) throw err;
 
         res.send({nodes: rows});
@@ -41,7 +41,7 @@ app.get('/groups/word/:word', function(req, res) {
     connection.query("call groups_with_word_relation('"+req.params.word+"')", function (err, rows, fields) {
         if (err) throw err;
 
-        res.send(JSON.stringify(rows));
+        res.send(JSON.stringify(rows[0]));
     });
 
     connection.end();
