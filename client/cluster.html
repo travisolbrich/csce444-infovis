@@ -43,7 +43,8 @@
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
     var w = document.getElementById('grapharea').offsetWidth - 30;
-    var h = 869;
+
+    var h = isNaN(window.innerHeight) ? window.clientHeight : window.innerHeight;
 
     var force = d3.layout.force()
             .charge(-275)
