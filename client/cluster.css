@@ -1,28 +1,19 @@
-html, body{
-    height: 100%;
-    width: 100%;
+#grapharea {
+    float: left;
 }
 
-body{
-    margin:0px;
+td {
+    padding: 4px;
+    border: 1px solid #c0c0c0;
 }
 
-.left {
-    background-color: aqua;
-    height: 100%;
-    width: 73%;
-    border-style: none;
-    margin: 0px;
+.sidebar {
+    padding: 5px 3px 0 0;
+    margin-left: -5px;
 }
 
-.right {
-    background-color: white;
-    position: fixed;
-    top: 0px;
-    left: 73%;
-    height: 100%;
-    width: 27%;
-    border-style: none;
-    margin: 0px;
-    padding: 5px;
+li {
+    list-style: circle;
+    margin-left: 18px;
+    padding-top: 8px;
 }
