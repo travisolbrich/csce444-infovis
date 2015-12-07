@@ -22,12 +22,23 @@
             connected by the many users across the website. In order to accomplish this, we are using a downsampled
             version of the Flickr Creative Community dataset curated and provided by Flickr.</p>
 
-        <p> Using the provided Flick
-            We have taken the provided data and broken it down over popular group names, the groups themselves, all the
-            way down to the users making up the Flickr community. Due to the scope of this project, the represented
-            groups make up the most popular groups within Flickr. Over the entire set of groups there are over 20,000
+        <p> Using the provided Flicker user data, we extracted all of the groups from the user records. These groups
+            are represented by nodes. We then computed the users that are shared between any two groups. These connections
+            are represented by edges, and the edge strength is the number of shared users.</p>
+
+        <p> We then clustered groups together that shared the same words in the title. For example, a group called "New Airplanes"
+            and a group called "Fast Airplanes" would be clustered by "Airplanes". Due to the scope of this project, the represented
+            groups and clusters make up the most popular groups within Flickr. Over the entire set of groups there are over 200,000
             connections between them all. We believe this effectively shows the vast web of interaction users experience
             as almost all groups have some connections.</p>
+
+        <h3>Pages</h3>
+        <ul>
+            <li><a href="cluster.html">Cluster List</a></li>
+            <li><a href="groups.html?word=me">Example Cluster: "me"</a></li>
+            <li><a href="groups.html?word=iphone">Example Cluster: "iphone"</a></li>
+            <li><a href="groups.html?word=graffiti">Example Cluster: "graffiti"</a></li>
+        </ul>
     </div>
 </div>
 </body>
