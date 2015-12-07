@@ -24,6 +24,12 @@
 <script>
     var w = 1100,
             h = 869;
+
+    // http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
+    function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+    }
+
     var force = d3.layout.force()
             .charge(-375)
             .chargeDistance(100)
@@ -38,10 +44,12 @@
             .attr("height", h)
             .style("background", "aqua");
 
-    d3.json("http://travisolbrich.com:8080/groups/word/me", function (error, nodes) {
+    var word = getURLParameter('word');
+
+    d3.json("http://travisolbrich.com:8080/groups/word/" + word, function (error, nodes) {
         if (error) throw error;
 
-        d3.json("http://travisolbrich.com:8080/relations/word/me", function (error, edgesPreprocess) {
+        d3.json("http://travisolbrich.com:8080/relations/word/" + word, function (error, edgesPreprocess) {
             if (error) throw error;
 
             // http://stackoverflow.com/questions/23986466/d3-force-layout-linking-nodes-by-name-instead-of-index
