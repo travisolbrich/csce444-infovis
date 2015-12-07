@@ -21,15 +21,15 @@
 </div>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
-    var w = 1000,
+    var w = 1100,
             h = 869;
     var force = d3.layout.force()
-            .charge(-100)
-        //.chargeDistance(100)
-            .linkDistance(100)
-        //.friction(0)
-        //.theta(1)
-            .gravity(1)
+            .charge(-375)
+            .chargeDistance(100)
+            .linkDistance(175)
+            //.friction(0)
+            //.theta(.5)
+            .gravity(.04)
             .size([w, h]);
     var svg = d3.select("div")
             .append("svg")
@@ -62,6 +62,13 @@
 
             force.nodes(nodes).links(edges).start();
 
+            var link = svg.selectAll(".link")
+                    .data(edges)
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .style("stroke", "#333")
+                    .style("stroke-width", function(d) {return Math.sqrt(d.value);});
+            
             var node = svg.selectAll(".node")
                     .data(nodes)
                     .enter().append("circle")
@@ -73,21 +80,13 @@
                         return Math.random() * 450;
                     })
                     .attr("r", function (d) {
-                        return Math.sqrt(d.trackedUserCount) / 1.1 + 2
+                        return Math.sqrt(d.trackedUserCount) / 1.6 + 15
                     })
                     .style("fill", "steelblue")          //function(d) { return color(1); }
                     .style("stroke", "darkgrey")
                     .style("stroke-width", "2px")
                     .style("fontcolor", "white")
                     .call(force.drag);
-
-            var link = svg.selectAll(".link")
-                    .data(edges)
-                    .enter().append("line")
-                    .attr("class", "link")
-                    .style("stroke", "#333")
-                    .style("stroke-width", "1px");
-
 
             node.append("title").text(function (d) {
                 return d.name;
