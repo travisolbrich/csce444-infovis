@@ -62,45 +62,48 @@
             d3.json("http://travisolbrich.com:8080/words/frequency", function(error, graph){
                 if(error) throw error;
                 
-                force.nodes(graph.nodes)
+                                force.nodes(graph.nodes)
                      .start();
                 
-                var bar = svg.selectAll(".node")
+                /*var gnodes = svg.selectAll('g.gnode')
+                                .data(graph.nodes)
+                                .enter()
+                                .append('g')
+                                .classed('gnode', true);*/
+                
+                var node = svg.selectAll(".node")
                             .data(graph.nodes)
-                            .enter()
-                            .append("rect")
-                            .attr("x", function(d, i) {return i*(w /75);})
-                            .attr("y", function(d) {return h - 40*Math.sqrt(d.occurrences);})
-                            .attr("width", w/75 - 1)
-                            .attr("height", function(d) {return 40*Math.sqrt(d.occurrences);})
-                            .style("fill", "steelblue");         //function(d) { return color(1); }
+                            .enter().append("circle")
+                            .attr("class", "node")
+                            .attr("cx", function() { return Math.random() * 450; })
+                            .attr("cy", function() { return Math.random() * 450; })
+                            .attr("r", function(d) { return Math.sqrt(d.occurrences)/1.8+30})
+                            .style("fill", "steelblue")          //function(d) { return color(1); }
+                            .style("stroke", "darkgrey")
+                            .style("stroke-width", "2px")
+                            .style("fontcolor", "white")
+                            .call(force.drag);
                 
-                bar.append("title")
+                node.append("title")
                     .text(function(d) { return d.word; });
-                
-                svg.selectAll("text")
-                    .data(graph.nodes)
-                    .enter()
-                    .append("text")
-                    .text(function(d) {return d.word;})
-                    .attr("y", function(d, i) {return i * (w / 75);})
-                    .attr("x", function(d) {return h - 40*Math.sqrt(d.occurrences);})
-                    .attr("dx", "-100em")
-                    .attr("dy", ".15em")
-                    .attr("transform", "rotate(-90)")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "9px")
-                    .attr("fill", "white");
                 
                 /*var titles = gnodes.append("title")
                             .text(function(d) { return d.word; });*/
                 
+                //console.log(titles);
+                
                 force.on("tick", function() {
-                    
+                    node.attr("cx", function(d) { return d.x; })
+                        .attr("cy", function(d) { return d.y; });
                 });
                 
                 /*node.on("click", function(){
                    window.location='#'; 
+                });*/
+                
+                //node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+                /*gnodes.attr("transform", function(d) { 
+                    return 'translate(' + [d.x, d.y] + ')'; 
                 });*/
             });
         </script>
