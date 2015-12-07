@@ -4,41 +4,69 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="groups.css">
+    <link rel="stylesheet" href="http://meyerweb.com/eric/tools/css/reset/reset.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="cluster.css">
 </head>
 
 <body>
-<div class="left">
+<div class="pure-g">
+    <div id="grapharea" class="pure-u-3-4">
+        <div id="graph"></div>
+    </div>
+    <div class="pure-u-1-4">
+        <div class="sidebar">
+            <h1 id="pageTitle"></h1>
+
+            <div id="nodeDetails">
+
+            </div>
+
+            <hr>
+            <a href="about.html" class="round-button">About</a><br><br>
+            <p>We had to choose different data to show which has set us back. Features still to come...</p>
+            <ul>
+                <li>Node changes color when selected, neighbor nodes change color</li>
+                <li>Option to view details for single node only</li>
+                <li>View users of a node and the groups they're in</li>
+                <li>Filter based on minimum number of shared users, group privacy, number of users in group</li>
+            </ul>
+        </div>
+    </div>
 
 </div>
-<div class="clearfix"></div>
 
-<div class="right">
-    <div class="round-button"><div class="round-button-circle"><a href="about.html" class="round-button">i</a></div></div>
-    <br><h1><pre>     100 Most Popular
-   Words in Group Names</pre>
-    </h1>
-</div>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
-    var w = 1100,
-            h = 869;
+    var w = document.getElementById('grapharea').offsetWidth - 30;
+    var h = 869;
 
     // http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
     function getURLParameter(name) {
-        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
+    }
+
+    function nodeSelected(node) {
+        document.getElementById("nodeDetails").innerHTML = "<table>" +
+                "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
+                "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
+                "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
+                "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
+                "</table>";
     }
 
     var force = d3.layout.force()
-            .charge(-375)
-            .chargeDistance(100)
-            .linkDistance(175)
-            //.friction(0)
-            //.theta(.5)
-            .gravity(.04)
+            .charge(-10)
+            .chargeDistance(60)
+            .linkDistance(375)
+            .friction(.01)
+        //.theta(.5)
+            .gravity(.5)
             .size([w, h]);
-    var svg = d3.select("div")
+    var svg = d3.select("#graph")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
@@ -52,12 +80,14 @@
         d3.json("http://travisolbrich.com:8080/relations/word/" + word, function (error, edgesPreprocess) {
             if (error) throw error;
 
+            document.getElementById("pageTitle").innerHTML = "Groups With '" + getURLParameter("word").charAt(0).toUpperCase() + (getURLParameter("word")).slice(1) + "'";
+
             // http://stackoverflow.com/questions/23986466/d3-force-layout-linking-nodes-by-name-instead-of-index
             var edges = [];
             edgesPreprocess.forEach(function (e) {
                 var sourceNode = nodes.filter(function (n) {
                     return n.groupId === e.groupAId;
-                })[0]
+                })[0];
                 var targetNode = nodes.filter(function (n) {
                     return n.groupId === e.groupBId;
                 })[0];
@@ -75,13 +105,19 @@
                     .data(edges)
                     .enter().append("line")
                     .attr("class", "link")
-                    .style("stroke", "#333")
-                    .style("stroke-width", function(d) {return Math.sqrt(d.value);});
-            
+                    .style("stroke", "#444")
+                    .style("stroke-opacity", "40%")
+                    .style("stroke-width", function (d) {
+                        return Math.sqrt(d.value);
+                    });
+
             var node = svg.selectAll(".node")
                     .data(nodes)
                     .enter().append("circle")
                     .attr("class", "node")
+                    .on("click", function (d, i) {
+                        nodeSelected(d);
+                    })
                     .attr("cx", function () {
                         return Math.random() * 450;
                     })

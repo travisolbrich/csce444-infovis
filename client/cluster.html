@@ -1,28 +1,50 @@
 <!DOCTYPE html>
 <html>
+<!DOCTYPE html>
+<html>
 
 <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="stylesheet" href="http://meyerweb.com/eric/tools/css/reset/reset.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="cluster.css">
 </head>
 
 <body>
-    <div class="left">
-    
+<div class="pure-g">
+    <div id="grapharea" class="pure-u-3-4">
+        <div id="graph"></div>
     </div>
-    <div class="clearfix"></div>
+    <div class="pure-u-1-4">
+        <div class="sidebar">
+            <h1 id="pageTitle">Most Popular Words</h1>
 
-    <div class="right">
-        <div class="round-button"><div class="round-button-circle"><a href="about.html" class="round-button">i</a></div></div>
-        <br><h1><pre>     100 Most Popular 
-   Words in Group Names</pre></h1>
+            <div id="nodeDetails">
+
+            </div>
+
+            <hr>
+            <a href="about.html" class="round-button">About</a><br><br>
+            <p>We had to choose different data to show which has set us back. Features still to come...</p>
+            <ul>
+                <li>Node changes color when selected, neighbor nodes change color</li>
+                <li>Option to view details for single node only</li>
+                <li>View users of a node and the groups they're in</li>
+                <li>Filter based on minimum number of shared users, group privacy, number of users in group</li>
+            </ul>
+        </div>
     </div>
+
+</div>
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script>
-            var w = 1100,
-                h = 869;
+            var w = document.getElementById('grapharea').offsetWidth - 30;
+            var h = 869;
+
             var force = d3.layout.force()
                             .charge(-275)
                             //.chargeDistance(100)
@@ -31,7 +53,7 @@
                             //.theta(1)
                             .gravity(.1)
                             .size([w, h]);
-            var svg = d3.select("div")
+            var svg = d3.select("#graph")
                             .append("svg")
                             .attr("width", w)
                             .attr("height", h)
