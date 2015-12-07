@@ -17,3 +17,15 @@ li {
     margin-left: 18px;
     padding-top: 8px;
 }
+
+.centered {
+    margin: auto;
+}
+
+.header {
+    text-align: center;
+}
+
+p {
+    margin-bottom: 14px;
+}
