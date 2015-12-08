@@ -54,12 +54,17 @@
     }
 
     function nodeSelected(node) {
-        document.getElementById("nodeDetails").innerHTML = "<table>" +
-                "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
-                "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
-                "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
-                "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
-                "</table>";
+
+        if(node.length > 0){
+            document.getElementById("nodeDetails").innerHTML = "";
+        }else {
+            document.getElementById("nodeDetails").innerHTML = "<table>" +
+                    "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
+                    "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
+                    "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
+                    "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
+                    "</table>";
+        }
     }
 
     var force = d3.layout.force()
@@ -132,12 +137,12 @@
                     .style("stroke", "darkgrey")
                     .style("stroke-width", "2px")
                     .style("fontcolor", "white")
+                    //.on("click", fade(.1))
                     .on("click", fade(.1))
                     .call(force.drag);
 
             svg.on("click", function () {
                 if(d3.event.target.localName == 'svg') {
-                    console.log('svg');
                     svg.selectAll(".node").call(fade(.4));
                 }
             });
@@ -159,6 +164,7 @@
             function fade(opacity) {
 
                 return function (d) {
+                    nodeSelected(d);
                     node.style("stroke-opacity", function (o) {
                         thisOpacity = isConnected(d, o) ? 1 : opacity;
                         if(opacity == .4) {
