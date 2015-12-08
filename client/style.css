@@ -12,6 +12,10 @@ td {
     margin-left: -5px;
 }
 
+.s, body, #graph {
+    background: rgba(167, 252, 240, 0.13);
+}
+
 li {
     list-style: circle;
     margin-left: 18px;

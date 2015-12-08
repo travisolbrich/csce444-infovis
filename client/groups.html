@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 
 <body>
@@ -17,7 +19,7 @@
     <div id="grapharea" class="pure-u-3-4">
         <div id="graph"></div>
     </div>
-    <div class="pure-u-1-4">
+    <div class="pure-u-1-4 s">
         <div class="sidebar">
             <h1 id="pageTitle"></h1>
 
@@ -64,6 +66,13 @@
                     "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
                     "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
                     "</table>";
+
+            $.getJSON( "http://travisolbrich.com:8080/group/"+node.groupId.replace("@", "%40") +"/users", function( users ) {
+                var userText = "<br><h2>Users:</h2><div style='height: 300px; overflow: scroll'>";
+                users.forEach(function(user){userText += "<a target='_blank' href='https://www.flickr.com/photos/" + user.userId.replace("@", "%40") + "'>" + user.nickname + "</a>, "})
+                document.getElementById("nodeDetails").innerHTML += userText + "</div>";
+            });
+
         }
     }
 
@@ -140,7 +149,7 @@
                 //.on("click", fade(.1))
                     .on("click", function (d) {
                         fade(.1)(d);
-                        d3.select(this).style("fill", "grey");
+                        d3.select(this).style("fill", "LightSlateGray")
                     })
                     .call(force.drag);
 
@@ -176,6 +185,7 @@
                                     thisOpacity = 1;
                                 }
                                 this.setAttribute('fill-opacity', thisOpacity);
+
                                 return thisOpacity;
                             });
 
