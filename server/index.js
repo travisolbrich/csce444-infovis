@@ -33,7 +33,7 @@ app.get('/relations/word/:word', function(req, res) {
     connection.end();
 });
 
-app.get('/groups/word/:word/?minGroupSize', function(req, res) {
+app.get('/groups/word/:word/:minGroupSize?', function(req, res) {
 
     var connection = mysql.createConnection(sqlconn.conn());
     connection.connect();
