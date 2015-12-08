@@ -92,7 +92,7 @@
 
     var word = getURLParameter('word');
 
-    d3.json("http://travisolbrich.com:8080/groups/word/" + word, function (error, nodes) {
+    d3.json("http://travisolbrich.com:8080/groups/word/" + word + "/" + 0, function (error, nodes) {
         if (error) throw error;
 
         d3.json("http://travisolbrich.com:8080/relations/word/" + word, function (error, edgesPreprocess) {

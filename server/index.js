@@ -35,16 +35,10 @@ app.get('/relations/word/:word', function(req, res) {
 
 app.get('/groups/word/:word/?minGroupSize', function(req, res) {
 
-    var query = "call groups_with_word_relation('"+req.params.word+"')"
-
-    if(req.params.minGroupSize != null) {
-        query = "select * from (call groups_with_word_relation('"+req.params.word+"')) g where trackedUserCount >" + req.params.minGroupSize;
-    }
-
     var connection = mysql.createConnection(sqlconn.conn());
     connection.connect();
 
-    connection.query(query, function (err, rows, fields) {
+    connection.query("call groups_with_word_relation('"+req.params.word+"',"+0+")", function (err, rows, fields) {
         if (err) throw err;
 
         res.send(JSON.stringify(rows[0]));
