@@ -60,12 +60,12 @@
     }
 
     var force = d3.layout.force()
-            .charge(-10)
-            .chargeDistance(60)
-            .linkDistance(375)
-            .friction(.01)
+            .charge(-150)
+       //     .chargeDistance(60)
+            .linkDistance(350)
+          //  .friction(.01)
         //.theta(.5)
-            .gravity(.5)
+         //   .gravity(.5)
             .size([w, h]);
     var svg = d3.select("#graph")
             .append("svg")
@@ -109,7 +109,7 @@
                     .style("stroke", "#444")
                     .style("stroke-opacity", "40%")
                     .style("stroke-width", function (d) {
-                        return Math.sqrt(d.value);
+                        return Math.sqrt(d.value)/2;
                     });
 
             var node = svg.selectAll(".node")
@@ -126,7 +126,7 @@
                         return Math.random() * 450;
                     })
                     .attr("r", function (d) {
-                        return Math.sqrt(d.trackedUserCount) / 1.6 + 15
+                        return Math.sqrt(d.trackedUserCount) / 1.2 + 5
                     })
                     .style("fill", "steelblue")          //function(d) { return color(1); }
                     .style("stroke", "darkgrey")
