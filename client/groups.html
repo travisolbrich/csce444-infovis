@@ -131,7 +131,8 @@
 
             var node = svg.selectAll(".node")
                     .data(nodes)
-                    .enter().append("circle")
+                    .enter()
+                    .append("circle")
                     .attr("class", "node")
                     .attr("cx", function () {
                         return Math.random() * 450;
