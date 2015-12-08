@@ -20,7 +20,9 @@
     <div class="pure-u-1-4">
         <div class="sidebar">
             <h1 id="pageTitle"></h1>
-	    <p>Click on a node to view group details.</p>
+
+            <p>Click on a node to view group details.</p>
+
             <div id="nodeDetails">
 
             </div>
@@ -28,6 +30,7 @@
             <hr>
             <a href="index.html">About</a><br><br>
             <a href="cluster.html">Back to Word Clusters</a><br><br>
+
             <p>We had to choose different data to show which has set us back. Features still to come...</p>
             <ul>
                 <li>Node changes color when selected, neighbor nodes change color</li>
@@ -61,11 +64,11 @@
 
     var force = d3.layout.force()
             .charge(-300)
-       //     .chargeDistance(60)
+        //     .chargeDistance(60)
             .linkDistance(350)
-          //  .friction(.01)
+        //  .friction(.01)
             .theta(.2)
-         //   .gravity(.5)
+        //   .gravity(.5)
             .size([w, h]);
     var svg = d3.select("#graph")
             .append("svg")
@@ -107,9 +110,9 @@
                     .enter().append("line")
                     .attr("class", "link")
                     .style("stroke", "#444")
-                    .style("stroke-opacity", "40%")
+                    .style("stroke-opacity", ".4")
                     .style("stroke-width", function (d) {
-                        return Math.sqrt(d.value)/2;
+                        return Math.sqrt(d.value) / 2;
                     });
 
             var node = svg.selectAll(".node")
@@ -129,8 +132,15 @@
                     .style("stroke", "darkgrey")
                     .style("stroke-width", "2px")
                     .style("fontcolor", "white")
-                    .on("mouseover", fade(.1)).on("mouseout", fade(1))
+                    .on("click", fade(.1))
                     .call(force.drag);
+
+            svg.on("click", function () {
+                if(d3.event.target.localName == 'svg') {
+                    console.log('svg');
+                    svg.selectAll(".node").call(fade(.4));
+                }
+            });
 
             node.append("title").text(function (d) {
                 return d.name;
@@ -138,22 +148,27 @@
 
             //fade http://jsfiddle.net/tristanreid/xReHA/636/
             var linkedByIndex = {};
-            edges.forEach(function(d) {
+            edges.forEach(function (d) {
                 linkedByIndex[d.source.index + "," + d.target.index] = 1;
             });
 
             function isConnected(a, b) {
                 return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index] || a.index == b.index;
             }
+
             function fade(opacity) {
-                return function(d) {
-                    node.style("stroke-opacity", function(o) {
+
+                return function (d) {
+                    node.style("stroke-opacity", function (o) {
                         thisOpacity = isConnected(d, o) ? 1 : opacity;
+                        if(opacity == .4) {
+                            thisOpacity = 1;
+                        }
                         this.setAttribute('fill-opacity', thisOpacity);
                         return thisOpacity;
                     });
 
-                    link.style("stroke-opacity", function(o) {
+                    link.style("stroke-opacity", function (o) {
                         return o.source === d || o.target === d ? 1 : opacity;
                     });
                 };
