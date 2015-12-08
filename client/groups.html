@@ -55,9 +55,9 @@
 
     function nodeSelected(node) {
 
-        if(node.length > 0){
+        if (node.length > 0) {
             document.getElementById("nodeDetails").innerHTML = "";
-        }else {
+        } else {
             document.getElementById("nodeDetails").innerHTML = "<table>" +
                     "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
                     "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
@@ -137,12 +137,15 @@
                     .style("stroke", "darkgrey")
                     .style("stroke-width", "2px")
                     .style("fontcolor", "white")
-                    //.on("click", fade(.1))
-                    .on("click", fade(.1))
+                //.on("click", fade(.1))
+                    .on("click", function (d) {
+                        fade(.1)(d);
+                        d3.select(this).style("fill", "grey");
+                    })
                     .call(force.drag);
 
             svg.on("click", function () {
-                if(d3.event.target.localName == 'svg') {
+                if (d3.event.target.localName == 'svg') {
                     svg.selectAll(".node").call(fade(.4));
                 }
             });
@@ -165,14 +168,16 @@
 
                 return function (d) {
                     nodeSelected(d);
-                    node.style("stroke-opacity", function (o) {
-                        thisOpacity = isConnected(d, o) ? 1 : opacity;
-                        if(opacity == .4) {
-                            thisOpacity = 1;
-                        }
-                        this.setAttribute('fill-opacity', thisOpacity);
-                        return thisOpacity;
-                    });
+
+                    node
+                            .style("stroke-opacity", function (o) {
+                                thisOpacity = isConnected(d, o) ? 1 : opacity;
+                                if (opacity == .4) {
+                                    thisOpacity = 1;
+                                }
+                                this.setAttribute('fill-opacity', thisOpacity);
+                                return thisOpacity;
+                            });
 
                     link.style("stroke-opacity", function (o) {
                         return o.source === d || o.target === d ? 1 : opacity;
