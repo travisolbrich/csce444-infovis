@@ -116,9 +116,6 @@
                     .data(nodes)
                     .enter().append("circle")
                     .attr("class", "node")
-                    .on("click", function (d, i) {
-                        nodeSelected(d);
-                    })
                     .attr("cx", function () {
                         return Math.random() * 450;
                     })
@@ -132,11 +129,35 @@
                     .style("stroke", "darkgrey")
                     .style("stroke-width", "2px")
                     .style("fontcolor", "white")
+                    .on("mouseover", fade(.1)).on("mouseout", fade(1))
                     .call(force.drag);
 
             node.append("title").text(function (d) {
                 return d.name;
             });
+
+            //fade http://jsfiddle.net/tristanreid/xReHA/636/
+            var linkedByIndex = {};
+            edges.forEach(function(d) {
+                linkedByIndex[d.source.index + "," + d.target.index] = 1;
+            });
+
+            function isConnected(a, b) {
+                return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index] || a.index == b.index;
+            }
+            function fade(opacity) {
+                return function(d) {
+                    node.style("stroke-opacity", function(o) {
+                        thisOpacity = isConnected(d, o) ? 1 : opacity;
+                        this.setAttribute('fill-opacity', thisOpacity);
+                        return thisOpacity;
+                    });
+
+                    link.style("stroke-opacity", function(o) {
+                        return o.source === d || o.target === d ? 1 : opacity;
+                    });
+                };
+            }
 
             force.on("tick", function () {
                 node.attr("cx", function (d) {
