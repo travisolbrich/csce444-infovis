@@ -26,7 +26,7 @@
             <p>Click on a node to view group details.</p>
 
             <div id="history">
-                <h3>History:</h3>
+                <h3 onclick="toggleHistory()">Toggle History</h3>
                 <ul id="historyList">
 
                 </ul>
@@ -59,58 +59,33 @@
 
     var visitedNodes = [];
 
+    function toggleHistory() {
+        if ($("#history").css("height") == "18px") {
+            $("#history").css("height", "150px");
+        }
+        else {
+            $("#history").css("height", "18px");
+        }
+    }
+
     // http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
     function getURLParameter(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
     }
 
-    function nodeSelected(node) {
-
-        if (node.length > 0) {
-            document.getElementById("nodeDetails").innerHTML = "";
-        } else {
-            $("#history").fadeIn(300);
-
-            document.getElementById("nodeDetails").innerHTML = "<table>" +
-                    "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
-                    "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
-                    "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
-                    "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
-                    "</table>";
-
-            $.getJSON( "http://travisolbrich.com:8080/group/"+node.groupId.replace("@", "%40") +"/users", function( users ) {
-                var userText = "<br><h2>Users:</h2><div style='height: 300px; overflow: scroll'>";
-                users.forEach(function(user){userText += "<a target='_blank' href='https://www.flickr.com/photos/" + user.userId.replace("@", "%40") + "'>" + user.nickname + "</a>, "})
-                document.getElementById("nodeDetails").innerHTML += userText + "</div>";
-            });
-
-            visitedNodes.push("<li><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>"+node.name+"</a></li>");
-            //if(visitedNodes.length > 5) {visitedNodes.pop();}
-
-            document.getElementById("historyList").innerHTML = "";
-
-            var toDisplay = visitedNodes.slice(Math.max(visitedNodes.length - 5, 0));
-
-            for(var i=toDisplay.length - 1; i >= 0; i--){
-                document.getElementById("historyList").innerHTML += toDisplay[i];
-            }
-
-        }
-    }
-
     var force = d3.layout.force()
             .charge(-300)
-        //     .chargeDistance(60)
+            //     .chargeDistance(60)
             .linkDistance(350)
-        //  .friction(.01)
+            //  .friction(.01)
             .theta(.2)
-        //   .gravity(.5)
+            //   .gravity(.5)
             .size([w, h]);
     var svg = d3.select("#graph")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
-            .style("background", "#E4F7F4");
+            .style("background", "#EBFAFA");
 
     var word = getURLParameter('word');
 
@@ -135,7 +110,7 @@
                 edges.push({
                     source: sourceNode,
                     target: targetNode,
-                    value: e.memberCount
+                    value: e.memberCount,
                 });
             });
 
@@ -169,7 +144,7 @@
                     .style("stroke", "darkgrey")
                     .style("stroke-width", "2px")
                     .style("fontcolor", "white")
-                //.on("click", fade(.1))
+                    //.on("click", fade(.1))
                     .on("click", function (d) {
                         fade(.1)(d);
                         d3.select(this).style("fill", "LightSlateGray")
@@ -185,6 +160,57 @@
             node.append("title").text(function (d) {
                 return d.name;
             });
+
+            function nodeSelected(node) {
+
+                if (node.length > 0) {
+                    document.getElementById("nodeDetails").innerHTML = "";
+                } else {
+                    $("#history").fadeIn(300);
+
+                    document.getElementById("nodeDetails").innerHTML = "<table>" +
+                            "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
+                            "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
+                            "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
+                            "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
+                            "</table>";
+
+                    $.getJSON("http://travisolbrich.com:8080/group/" + node.groupId.replace("@", "%40") + "/users", function (users) {
+                        var userText = "<br><h2>Users:</h2><div style='height: 300px; overflow: scroll'>";
+                        users.forEach(function (user) {
+                            userText += "<a target='_blank' href='https://www.flickr.com/photos/" + user.userId.replace("@", "%40") + "'>" + user.nickname + "</a>, "
+                        })
+                        document.getElementById("nodeDetails").innerHTML += userText + "</div>";
+                    });
+
+                    visitedNodes.push("<li><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></li>");
+                    //if(visitedNodes.length > 5) {visitedNodes.pop();}
+
+                    document.getElementById("historyList").innerHTML = "";
+
+                    var toDisplay = visitedNodes.slice(Math.max(visitedNodes.length - 5, 0));
+
+                    for (var i = toDisplay.length - 1; i >= 0; i--) {
+                        document.getElementById("historyList").innerHTML += toDisplay[i];
+                    }
+
+                    var conn = [];
+                    for (var i = 0; i < nodes.length; i++) {
+                        if (isConnected(node, nodes[i])) {
+                            conn.push(nodes[i]);
+                        }
+                    }
+
+                    var earr = [];
+                    conn.forEach(function (n) {
+                        for (var x = 0; x < edges.length; x++) {
+                            if ((edges[x].target == n && edges[x].source == node) || (edges[x].source == n && edges[x].target == node)) {
+                                console.log(edges[x]);
+                            }
+                        }
+                    })
+                }
+            }
 
             //fade http://jsfiddle.net/tristanreid/xReHA/636/
             var linkedByIndex = {};
@@ -220,14 +246,14 @@
 
             force.on("tick", function () {
                 node.attr("cx", function (d) {
-                    return d.x;
-                })
+                            return d.x;
+                        })
                         .attr("cy", function (d) {
                             return d.y;
                         });
                 link.attr("x1", function (d) {
-                    return d.source.x;
-                })
+                            return d.source.x;
+                        })
                         .attr("y1", function (d) {
                             return d.source.y;
                         })

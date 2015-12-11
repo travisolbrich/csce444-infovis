@@ -12,8 +12,8 @@ td {
     margin-left: -5px;
 }
 
-.s, body, #graph {
-    background: rgba(167, 252, 240, 0.13);
+.s, body, #graph, html {
+    background: #F8FFFF;
 }
 
 li {
@@ -37,15 +37,16 @@ p {
 #history{
     display: none;
     width: 300px;
-    height: 150px;
-    position: absolute;
+    height: 18px;
+    position: fixed;
     padding-bottom: 10px;
     padding-left: 10px;
     padding-top: 5px;
-    bottom: -10px;
+    bottom: -10px; /*-10px for display*/
     left: -5px;
-    background: rgba(228, 247, 244, 0.93);
+    background: rgba(238, 252, 252, 0.93);
     border-top: 1px solid black;
     border-right: 1px solid black;
     border-radius: 5px;
+    overflow: hidden;
 }
