@@ -48,7 +48,7 @@
                         tp = {top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
                         break;
                     case 's':
-                        tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 +20};
+                        tp = {top: pos.top - actualHeight , left: pos.left + pos.width / 2 - actualWidth / 2 +15};
                         break;
                     case 'e':
                         tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - this.options.offset};
