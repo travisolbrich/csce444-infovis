@@ -38,6 +38,10 @@
 
             </div>
 
+            <div id="c"></div>
+
+            <div id="userList"></div>
+
             <hr>
             <a href="index.html">About</a><br><br>
             <a href="cluster.html">Back to Word Clusters</a><br><br>
@@ -169,9 +173,12 @@
             });
 
             function nodeSelected(node) {
+                document.getElementById("c").innerHTML = "";
+                document.getElementById("userList").innerHTML = "";
 
                 if (node.length > 0) {
                     document.getElementById("nodeDetails").innerHTML = "";
+
                 } else {
                     $("#history").fadeIn(300);
 
@@ -183,11 +190,11 @@
                             "</table>";
 
                     $.getJSON("http://travisolbrich.com:8080/group/" + node.groupId.replace("@", "%40") + "/users", function (users) {
-                        var userText = "<br><h2>Users:</h2><div style='height: 300px; overflow: scroll'>";
+                        var userText = "<br><h2>Users:</h2><div style='max-height: 300px; overflow-y: auto'>";
                         users.forEach(function (user) {
                             userText += "<a target='_blank' href='https://www.flickr.com/photos/" + user.userId.replace("@", "%40") + "'>" + user.nickname + "</a>, "
                         })
-                        document.getElementById("nodeDetails").innerHTML += userText + "</div>";
+                        document.getElementById("userList").innerHTML = userText + "</div>";
                     });
 
                     visitedNodes.push("<li><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></li>");
@@ -212,10 +219,51 @@
                     conn.forEach(function (n) {
                         for (var x = 0; x < edges.length; x++) {
                             if ((edges[x].target == n && edges[x].source == node) || (edges[x].source == n && edges[x].target == node)) {
-                                console.log(edges[x]);
+                                earr.push(edges[x]);
                             }
                         }
                     })
+
+                    var connToDisplay = [];
+                    for (var i = 0; i < earr.length; i++){
+                        n = earr[i];
+                        var toAdd;
+                        var strength;
+
+                        if(n.target.groupId == node.groupId){
+                            toAdd = n.source;
+                            strength = n.value;
+                        } else {
+                            toAdd = n.target;
+                            strength = n.value;
+                        }
+
+                        var contains = false;
+                        for (var x = 0; x < connToDisplay.length; x++){
+                            if(connToDisplay[x].group.groupId == toAdd.groupId){
+                                contains = true;
+                            }
+                        }
+
+                        if(!contains) {
+                            connToDisplay.push({group: toAdd, strength: strength});
+                        }
+                    }
+
+                    var text =
+                            "<br><h2>Connected Groups</h2>"+
+                    "<div id='connected'style='max-height: 300px; overflow-y: auto'>"+
+
+                        "<table id='connectedTableRows'>"+
+                         "   <tr><td>Connected Group</td><td>Strength</td></tr>";
+
+                    for(var i=0; i < connToDisplay.length; i++) {
+                        node = connToDisplay[i];
+                        text += "<tr><td><a target='_blank' href='http://flickr.com/groups/" + node.group.groupId + "'>" + node.group.name + "</a></td><td>" + node.strength + "</td></tr>";
+                    }
+
+                    document.getElementById("c").innerHTML = text + "</table>"+
+                            "</div>";
                 }
             }
 

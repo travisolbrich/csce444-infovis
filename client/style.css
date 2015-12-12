@@ -1,5 +1,7 @@
 #grapharea {
     float: left;
+    background: rgb(235, 250, 250);
+    height: 100%;
 }
 
 td {
@@ -49,4 +51,11 @@ p {
     border-right: 1px solid black;
     border-radius: 5px;
     overflow: hidden;
+}
+
+h2{
+    height: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
