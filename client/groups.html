@@ -47,15 +47,7 @@
             <hr>
             <a href="index.html">About</a><br><br>
             <a href="cluster.html">Back to Word Clusters</a><br><br>
-
-            <p>We had to choose different data to show which has set us back. Features still to come...</p>
-            <ul>
-                <li>Node changes color when selected, neighbor nodes change color</li>
-                <li>Option to view details for single node only</li>
-                <li>View users of a node and the groups they're in</li>
-                <li>Filter based on minimum number of shared users, group privacy, number of users in group</li>
-            </ul>
-        </div>
+	</div>
     </div>
 
 </div>
@@ -203,7 +195,6 @@
 
                         document.getElementById("nodeDetails").innerHTML = "<br><hr><h2>Group Information</h2><table>" +
                                 "<tr><td>Group</td><td><a target='_blank' href='http://flickr.com/groups/" + node.groupId + "'>" + node.name + "</a></td></tr>" +
-                                "<tr><td>Tracked Member Count</td><td>" + node.trackedUserCount + "</td></tr>" +
                                 "<tr><td>Total Member Count</td><td>" + node.userCount + "</td></tr>" +
                                 "<tr><td>Photo Count</td><td>" + node.photoCount + "</td></tr>" +
                                 "</table>";
