@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="jquery.tipsy.js"></script>
+    <link href="tipsy.css" rel="stylesheet" type="text/css" />
+    
 </head>
 
 <body>
@@ -117,10 +121,15 @@
                         return d.y;
                     });
         });
-
-        /*node.on("click", function(){
-         window.location='#';
-         });*/
+        
+        $('svg circle').tipsy({
+            gravity: 's',
+            html: true,
+            title: function() {
+                var d = this.__data__;
+                return d.word;
+            }
+        });
 
         //node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
         /*gnodes.attr("transform", function(d) {
